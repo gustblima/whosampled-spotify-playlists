@@ -7,3 +7,4 @@ def handler(event, context):
         "body": json.dumps(body)
     }
     return response
+
