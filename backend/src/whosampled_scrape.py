@@ -3,7 +3,6 @@ from lxml import html
 import requests
 import urllib.parse
 
-requests.get("https://www.whosampled.com/Kanye-West/Power/", headers={"User-Agent":"Mozilla/5.0"})
 root_url = 'https://www.whosampled.com'
 
 def create_samples_list (track_list):
