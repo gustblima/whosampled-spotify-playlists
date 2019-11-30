@@ -6,9 +6,9 @@ import urllib.parse
 requests.get("https://www.whosampled.com/Kanye-West/Power/", headers={"User-Agent":"Mozilla/5.0"})
 root_url = 'https://www.whosampled.com'
 
-def create_sample_list (track_list):
-    for track in track_list[:10]:
-        search_string = urllib.parse.quote('{name} {artist}'.format(name = track['name'], artist = track['artist']))
+def create_samples_list (track_list):
+    for track in track_list:
+        search_string = urllib.parse.quote(track)
         search_content = request_page_content('/search/tracks/?q=' + search_string)
         track_link = search_content.xpath("//a[@class='trackName']/@href").pop()
         if track_link:

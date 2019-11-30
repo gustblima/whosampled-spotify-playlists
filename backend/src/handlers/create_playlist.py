@@ -2,10 +2,9 @@ import json
 from backend.src.spotify_api import SpotifyApi
 
 def handler(event, context):
-
-    body = json.loads(event)['body']
-    spotify = SpotifyApi(body['token'])
-    playlist = spotify.create_playlist(body['playlistName'])
+    event = json.loads(event)
+    spotify = SpotifyApi(event['queryStringParameters']['token'])
+    playlist = spotify.create_playlist(event['body']['playlistName'])
     
     return {
         "statusCode": 200,

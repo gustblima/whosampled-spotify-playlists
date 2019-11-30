@@ -34,46 +34,46 @@ provider:
 #  exclude:
 #    - exclude-me.py
 #    - exclude-me-dir/**
+custom:
+  cors:
+    origin: '*'
+    headers:
+      - Content-Type
+      - X-Amz-Date
+      - Authorization
+      - X-Api-Key
+      - X-Amz-Security-Token
+      - X-Amz-User-Agent
 
 functions:
-  hello:
-    handler: handler.hello
-#    The following are a few example events you can configure
-#    NOTE: Please make sure to change your handler code to work with those events
-#    Check the event documentation for details
-#    events:
-#      - http:
-#          path: users/create
-#          method: get
-#      - websocket: $connect
-#      - s3: ${env:BUCKET}
-#      - schedule: rate(10 minutes)
-#      - sns: greeter-topic
-#      - stream: arn:aws:dynamodb:region:XXXXXX:table/foo/stream/1970-01-01T00:00:00.000
-#      - alexaSkill: amzn1.ask.skill.xx-xx-xx-xx
-#      - alexaSmartHome: amzn1.ask.skill.xx-xx-xx-xx
-#      - iot:
-#          sql: "SELECT * FROM 'some_topic'"
-#      - cloudwatchEvent:
-#          event:
-#            source:
-#              - "aws.ec2"
-#            detail-type:
-#              - "EC2 Instance State-change Notification"
-#            detail:
-#              state:
-#                - pending
-#      - cloudwatchLog: '/aws/lambda/hello'
-#      - cognitoUserPool:
-#          pool: MyUserPool
-#          trigger: PreSignUp
-#      - alb:
-#          listenerArn: arn:aws:elasticloadbalancing:us-east-1:XXXXXX:listener/app/my-load-balancer/50dc6c495c0c9188/
-#          priority: 1
-#          conditions:
-#            host: example.com
-#            path: /hello
+  create_playlist:
+    handler: src/handlers/create_playlist.handler
+    events:
+      - http:
+          method: post
+          path: playlists
+          cors: ${self:custom.cors}
 
-#    Define function environment variables here
-#    environment:
-#      variable2: value2
+  get_playlist_tracks:
+    handler: src/handlers/get_playlist_tracks.handler
+    events:
+      - http:
+          method: get
+          path: playlists/{id}
+           request:
+            parameters:
+              paths:
+                id: true
+          cors: ${self:custom.cors}
+
+  get_samples:
+    handler: src/handlers/get_samples.handler
+    events:
+      - http:
+          method: get
+          path: samples
+           request:
+            parameters:
+              paths:
+                id: true
+          cors: ${self:custom.cors}

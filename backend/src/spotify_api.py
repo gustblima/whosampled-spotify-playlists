@@ -6,8 +6,10 @@ spotify_api = 'https://api.spotify.com'
 class SpotifyApi:
     
     def __init__(self, token):
-        self.token = token
-        
+        if token:
+            self.token = token
+        else:
+            raise
             
     def create_playlist(self, playlist_name):
         url = '{api}/v1/playlists'.format(api = spotify_api)

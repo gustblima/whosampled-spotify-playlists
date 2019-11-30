@@ -1,11 +1,13 @@
 import json
-from backend.src.whosamples_scrape import create_sample_list
+from backend.src.whosampled_scrape import create_samples_list
 
 def handler(event, context):
 
-    body = json.loads(event)['body']
-    result = list(create_sample_list(body['tracks']))
-    return {
-        "statusCode": 200,
-        "body": json.dumps(result)
-    }
+    query_params = json.loads(event)['queryStringParameters']
+    tracks = query_params['tracks']
+    if tracks:
+        result = list(create_samples_list(tracks.split(',')))
+        return {
+            "statusCode": 200,
+            "body": json.dumps(result)
+        }
