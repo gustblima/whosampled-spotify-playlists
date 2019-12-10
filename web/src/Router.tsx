@@ -1,13 +1,14 @@
 import React from 'react'
 import { Router as ReactRouter, Route, Switch } from 'react-router-dom'
 import { createBrowserHistory } from "history";
-import { Main, CreatePlaylist } from './views'
+import { Homepage, CreatePlaylist, AuthCallback } from './views'
 
 const Router: React.SFC<any> = () => ( 
   <ReactRouter history={createBrowserHistory()}>
     <Switch>
-      <Route exact path='/' component={Main} />
-      <Route exact path='/playlist' component={CreatePlaylist} />
+      <Route exact path='/' component={Homepage} />
+      <Route exact path='/callback' component={AuthCallback} />
+      <Route exact path='/create-playlist' component={CreatePlaylist} />
     </Switch>
   </ReactRouter> 
 )
