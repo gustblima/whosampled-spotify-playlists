@@ -7,23 +7,27 @@ class WhoSampledScrape:
     
     __url = 'https://www.whosampled.com'
     
-    def create_samples_list (self, track_list):
-        for track in track_list:
-            search_string = urllib.parse.quote(track)
-            search_content = self.__request_page_content('/search/tracks/?q=' + search_string)
-            track_link = search_content.xpath("//a[@class='trackName']/@href").pop()
-            if track_link:
-                for sample in self.__parse_samples_page(track_link):
-                    yield sample
+    def get_samples_from_track_search (self, search):
+        search_string = urllib.parse.quote(search)
+        search_content = self.__request_page_content('/search/tracks/?q=' + search_string)
+        track = search_content.xpath("//span[@class='trackDetails']").pop(0)
+        track_link = track.xpath(".//a[@class='trackName']/@href").pop(0)
+        if track_link:
+            track_details = self.__get_track_information(track)
+            samples = list(self.__parse_samples_page(track_link))
+            return { "name": track_details['name'], "artist": track_details['artist'], "samples": samples }
+    
+    def __get_track_information(self, track_element):
+        track_name = track_element.xpath(".//a[contains(@class, 'trackName')]/text()").pop(0)
+        track_artist = track_element.xpath(".//span[@class='trackArtist']//a/text()")
+        return { "name": track_name, "artist": track_artist }
 
 
     def __parse_samples_page(self, link):
         samples_page = self.__request_page_content(link)
         samples_sections = samples_page.xpath("//section[contains(.//span, 'Contains samples')]//div[@class='trackDetails']")
         for sample in samples_sections:
-            sample_name = sample.xpath(".//a[contains(@class, 'trackName')]/text()").pop()
-            sample_artist = sample.xpath(".//span[@class='trackArtist']//a/text()").pop()
-            yield { "name": sample_name, "artist": sample_artist }
+            yield self.__get_track_information(sample)
 
 
     def __request_page_content(self, link):
