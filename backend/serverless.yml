@@ -3,77 +3,17 @@ provider:
   name: aws
   runtime: python3.8
 
-  stage: dev
-  region: us-east-1
+stage: dev
+region: us-east-1
 
-# you can add statements to the Lambda function's IAM Role here
-#  iamRoleStatements:
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:ListBucket"
-#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:PutObject"
-#      Resource:
-#        Fn::Join:
-#          - ""
-#          - - "arn:aws:s3:::"
-#            - "Ref" : "ServerlessDeploymentBucket"
-#            - "/*"
-
-# you can define service wide environment variables here
-#  environment:
-#    variable1: value1
-
-# you can add packaging information here
-#package:
-#  include:
-#    - include-me.py
-#    - include-me-dir/**
-#  exclude:
-#    - exclude-me.py
-#    - exclude-me-dir/**
-custom:
-  cors:
-    origin: '*'
-    headers:
-      - Content-Type
-      - X-Amz-Date
-      - Authorization
-      - X-Api-Key
-      - X-Amz-Security-Token
-      - X-Amz-User-Agent
+plugins:
+  - serverless-offline
 
 functions:
-  create_playlist:
-    handler: src/handlers/create_playlist.handler
-    events:
-      - http:
-          method: post
-          path: playlists
-          cors: ${self:custom.cors}
-
-  get_playlist_tracks:
-    handler: src/handlers/get_playlist_tracks.handler
-    events:
-      - http:
-          method: get
-          path: playlists/{id}
-           request:
-            parameters:
-              paths:
-                id: true
-          cors: ${self:custom.cors}
-
   get_samples:
     handler: src/handlers/get_samples.handler
     events:
       - http:
           method: get
           path: samples
-           request:
-            parameters:
-              paths:
-                id: true
-          cors: ${self:custom.cors}
+          cors: true
