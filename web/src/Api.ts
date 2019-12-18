@@ -22,6 +22,9 @@ class SpotifyApi {
     baseURL: 'https://api.spotify.com/v1',
   })
 
+  constructor() {
+    this.setToken(sessionStorage.getItem('t'))
+  }
   createPlaylist(name: string, description: string, isPublic: boolean): Promise<any> {
     const body = {
         name,
@@ -61,6 +64,7 @@ class SpotifyApi {
 
   setToken(token: string) {
     this.api.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    sessionStorage.setItem('t', token)
   }
 
 }
