@@ -8,10 +8,13 @@ class WhoSampledScrape:
     __url = 'https://www.whosampled.com'
     
     def get_samples_from_track_search (self, search):
-        search_string = urllib.parse.quote(search)
-        search_content = self.__request_page_content('/search/tracks/?q=' + search_string)
-        track = search_content.xpath("//span[@class='trackDetails']").pop(0)
-        track_link = track.xpath(".//a[@class='trackName']/@href").pop(0)
+        try:
+            search_string = urllib.parse.quote(search)
+            search_content = self.__request_page_content('/search/tracks/?q=' + search_string)
+            track = search_content.xpath("//span[@class='trackDetails']").pop(0)
+            track_link = track.xpath(".//a[@class='trackName']/@href").pop(0)
+        except:
+            return None
         if track_link:
             track_details = self.__get_track_information(track)
             samples = list(self.__parse_samples_page(track_link))
