@@ -75,4 +75,10 @@ class ScrapeApi {
     baseURL: process.env.REACT_APP_API_GATEWAY_ADDRESS
   })
 
+  getSamplesTracks(trackNames: String[]): Promise<any> {
+    const params = {
+      tracks: trackNames.join(';')
+    }
+    return this.api.get('/samples', { params }).then(toData)
+  }
 }
