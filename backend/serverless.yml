@@ -9,6 +9,17 @@ region: us-east-1
 plugins:
   - serverless-offline
 
+custom:
+  cors:
+    origin: '*'
+    headers:
+      - Content-Type
+      - X-Amz-Date
+      - Authorization
+      - X-Api-Key
+      - X-Amz-Security-Token
+      - X-Amz-User-Agent
+
 functions:
   get_samples:
     handler: src/handlers/get_samples.handler
@@ -16,4 +27,4 @@ functions:
       - http:
           method: get
           path: samples
-          cors: true
+          cors: ${self:custom.cors}
